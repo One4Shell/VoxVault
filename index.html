@@ -6,7 +6,32 @@
     <title>VoxVault | Secure Offline Audio to Text & Video Caption Generator</title>
     <meta name="description" content="Professional GDPR compliant transcription tool. Convert audio to text offline in your browser. The safest local video caption generator for lawyers, doctors, and journalists. Zero data egress.">
     <meta name="keywords" content="Offline audio to text secure, Local video caption generator, GDPR compliant transcription tool, Secure transcription for lawyers, Medical dictation software, Private speech to text">
-    
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="VoxVault">
+    <meta name="theme-color" content="#3b82f6">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://voxvault.h4shell.it/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://voxvault.h4shell.it/">
+    <meta property="og:title" content="VoxVault | Secure Offline Audio to Text Converter">
+    <meta property="og:description" content="Professional GDPR compliant transcription tool. Convert audio to text 100% offline in your browser. Zero data egress - perfect for lawyers, doctors, and journalists.">
+    <meta property="og:image" content="https://voxvault.h4shell.it/og-image.png">
+    <meta property="og:site_name" content="VoxVault">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://voxvault.h4shell.it/">
+    <meta name="twitter:title" content="VoxVault | Secure Offline Audio to Text Converter">
+    <meta name="twitter:description" content="Professional GDPR compliant transcription tool. Convert audio to text 100% offline in your browser. Zero data egress.">
+    <meta name="twitter:image" content="https://voxvault.h4shell.it/og-image.png">
+
     <!-- JSON-LD Schema for SEO -->
     <script type="application/ld+json">
     {
@@ -26,6 +51,48 @@
         "@type": "Audience",
         "audienceType": "Lawyers, Medical Professionals, Journalists"
       }
+    }
+    </script>
+
+    <!-- FAQ Schema for Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this audio to text converter truly offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Once the website loads, the AI model (Whisper) is downloaded to your browser's cache. After that, you can disconnect from the internet and the offline audio to text secure processing will continue to function 100% locally on your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is VoxVault GDPR compliant?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because no data is sent to any server. Traditional transcription services upload your files to the cloud. VoxVault runs the neural network inside your browser, making it a native GDPR compliant transcription tool by design. We physically cannot access your data."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use VoxVault as a video caption generator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. You can upload MP4, MOV, or M4A files. The tool extracts the audio and generates timestamped subtitles. You can then export these as .SRT or .VTT files, serving as a free local video caption generator for your content."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What audio formats are supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We support all major audio and video formats including MP3, WAV, OGG, MP4, MOV, and M4A. The browser's native audio decoding engine handles the file processing."
+          }
+        }
+      ]
     }
     </script>
 
@@ -97,7 +164,7 @@
                         <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                         Offline Ready
                     </span>
-                    <a href="https://github.com/xenova/transformers.js" target="_blank" class="text-slate-400 hover:text-slate-700 transition-colors p-2" aria-label="GitHub">
+                    <a href="https://github.com/One4Shell/VoxVault" target="_blank" class="text-slate-400 hover:text-slate-700 transition-colors p-2" aria-label="GitHub">
                         <i class="fa-brands fa-github text-xl"></i>
                     </a>
                     <a href="#app" class="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg transition-all hidden sm:block">
@@ -134,8 +201,8 @@
                 </p>
 
                 <div class="flex flex-wrap justify-center gap-4 pt-4">
-                    <a href="#app" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1 text-lg flex items-center gap-2">
-                        Start Transcribing Now <i class="fa-solid fa-arrow-right"></i>
+                    <a href="#app" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1 text-lg flex items-center gap-2" aria-label="Start transcribing audio now">
+                        Start Transcribing Now <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                     </a>
                     <a href="#how-it-works" class="px-8 py-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl shadow-sm hover:shadow-md transition-all text-lg">
                         How It Works
@@ -201,8 +268,8 @@
                                 </select>
                             </div>
                             
-                            <button id="transcribe-btn" disabled class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 transform active:scale-95">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> Start Transcription
+                            <button id="transcribe-btn" disabled class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 transform active:scale-95" aria-label="Start audio transcription">
+                                <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Start Transcription
                             </button>
                         </div>
                     </div>
@@ -246,11 +313,11 @@
                                 <span class="bg-white px-2 py-1 rounded border border-slate-200 shadow-sm"><i class="fa-solid fa-font mr-1"></i> <span id="words-count">0 words</span></span>
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="copyToClipboard()" class="px-3 py-2 text-slate-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 rounded-lg transition-all text-sm" title="Copy Text">
-                                    <i class="fa-regular fa-copy mr-1"></i> Copy
+                                <button onclick="copyToClipboard()" class="px-3 py-2 text-slate-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 rounded-lg transition-all text-sm" title="Copy Text" aria-label="Copy transcription to clipboard">
+                                    <i class="fa-regular fa-copy mr-1" aria-hidden="true"></i> Copy
                                 </button>
-                                <button onclick="downloadResult()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-2">
-                                    <i class="fa-solid fa-download"></i> Export File
+                                <button onclick="downloadResult()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-2" aria-label="Download transcription file">
+                                    <i class="fa-solid fa-download" aria-hidden="true"></i> Export File
                                 </button>
                             </div>
                         </div>
@@ -470,7 +537,7 @@
 
     <footer class="bg-white border-t border-slate-200 mt-auto py-8">
         <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
-            <p>&copy; 2023 VoxVault. Designed for Privacy.</p>
+            <p>&copy; 2025 VoxVault. Designed for Privacy.</p>
         </div>
     </footer>
 
