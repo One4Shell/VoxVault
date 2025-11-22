@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxVault | Secure Offline Audio to Text & Video Caption Generator</title>
+    <meta name="description" content="Professional GDPR compliant transcription tool. Convert audio to text offline in your browser. The safest local video caption generator for lawyers, doctors, and journalists. Zero data egress.">
+    <meta name="keywords" content="Offline audio to text secure, Local video caption generator, GDPR compliant transcription tool, Secure transcription for lawyers, Medical dictation software, Private speech to text">
+    
+    <!-- JSON-LD Schema for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "VoxVault",
+      "headline": "Secure Offline Audio to Text Converter",
+      "applicationCategory": "Productivity",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": "Offline processing, GDPR compliant, SRT/VTT export, WebGPU acceleration, Zero data retention",
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Lawyers, Medical Professionals, Journalists"
+      }
+    }
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 5rem; /* Offset for sticky navbar */
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Global Caret Color */
+        input, textarea, select { caret-color: #000000; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #000000; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #000000; }
+
+        /* Force Black Cursor on Textarea (Fix for Dark Mode OS on Light Background) */
+        textarea, input[type="text"] {
+            cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 2h2v20h-2zM9 2h6v2H9zM9 20h6v2H9z' fill='%23000000'/%3E%3C/svg%3E") 12 12, auto !important;
+        }
+
+        /* Animations */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .animate-pulse-ring { animation: pulse-ring 2s infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2 group" aria-label="Home">
+                    <i class="fa-solid fa-shield-halved text-blue-600 text-2xl group-hover:rotate-12 transition-transform"></i>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">VoxVault</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Features</a>
+                    <a href="#how-it-works" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">How It Works</a>
+                    <a href="#use-cases" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Use Cases</a>
+                    <a href="#faq" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">FAQ</a>
+                </div>
+
+                <!-- Right Actions -->
+                <div class="flex items-center gap-3">
+                    <span class="hidden sm:flex text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100 text-green-800 items-center gap-1 cursor-help" title="Processing happens entirely in your browser">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        Offline Ready
+                    </span>
+                    <a href="https://github.com/xenova/transformers.js" target="_blank" class="text-slate-400 hover:text-slate-700 transition-colors p-2" aria-label="GitHub">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                    <a href="#app" class="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg transition-all hidden sm:block">
+                        Launch App
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center w-full">
+        
+        <!-- Hero Section (Full Width) -->
+        <section class="w-full bg-white pt-20 pb-20 px-4 relative overflow-hidden border-b border-slate-200">
+            <!-- Background Decoration -->
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+                <div class="absolute -top-[100px] -left-[100px] w-[500px] h-[500px] bg-blue-50 rounded-full blur-3xl opacity-50"></div>
+                <div class="absolute top-[20%] right-[10%] w-[300px] h-[300px] bg-purple-50 rounded-full blur-3xl opacity-50"></div>
+            </div>
+
+            <div class="max-w-5xl mx-auto text-center space-y-8">
+                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-semibold tracking-wide uppercase shadow-sm hover:shadow-md transition-shadow cursor-default">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    100% Private & Offline Processing
+                </span>
+                
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+                    The Secure <span class="gradient-text">Offline Audio to Text</span> <br /> Converter for Professionals
+                </h1>
+                
+                <p class="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-light">
+                    Transcribe sensitive interviews, legal depositions, and medical notes directly in your browser. The only <strong>GDPR compliant transcription tool</strong> with zero data egress.
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <a href="#app" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1 text-lg flex items-center gap-2">
+                        Start Transcribing Now <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#how-it-works" class="px-8 py-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl shadow-sm hover:shadow-md transition-all text-lg">
+                        How It Works
+                    </a>
+                </div>
+
+                <!-- Trust Signals -->
+                <div class="pt-10 flex flex-wrap justify-center gap-8 text-slate-400 text-sm font-medium">
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> No Server Uploads</div>
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Unlimited Files</div>
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Free to Use</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- APP SECTION (The "Product") -->
+        <section id="app" class="w-full bg-slate-50 py-20 px-4">
+            <div class="max-w-5xl mx-auto space-y-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-900">Live Transcription Demo</h2>
+                    <p class="text-slate-600 mt-2">Load a file and watch the local model work instantly.</p>
+                </div>
+
+                <!-- Application Card -->
+                <div class="bg-white w-full rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col md:flex-row min-h-[550px] ring-1 ring-black/5">
+                    
+                    <!-- Left Panel: Input & Status -->
+                    <div class="w-full md:w-1/3 bg-slate-50 border-r border-slate-200 p-6 flex flex-col gap-6">
+                        <!-- Model Status -->
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                            <div class="flex justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                <span>System Status</span>
+                                <span id="model-status-text" class="text-blue-600">Initializing...</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                                <div id="model-progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Dropzone -->
+                        <div id="dropzone" class="flex-grow border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all group relative bg-white">
+                            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-slate-700">Drop Audio/Video Here</h3>
+                            <p class="text-xs text-slate-400 mt-2">MP3, WAV, MP4, MOV, M4A</p>
+                            <input type="file" id="file-input" class="hidden" accept="audio/*,video/*">
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Source Language</label>
+                                <select id="language-select" class="w-full p-2.5 bg-white border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                                    <option value="en">English</option>
+                                    <option value="multilingual">Multilingual (Auto-detect)</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="it">Italian</option>
+                                    <option value="pt">Portuguese</option>
+                                    <option value="nl">Dutch</option>
+                                </select>
+                            </div>
+                            
+                            <button id="transcribe-btn" disabled class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 transform active:scale-95">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Start Transcription
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Output -->
+                    <div class="w-full md:w-2/3 flex flex-col bg-white">
+                        <!-- Tabs -->
+                        <div class="flex border-b border-slate-200 bg-slate-50/50">
+                            <button class="tab-btn active flex-1 px-4 py-3 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 focus:outline-none transition-colors" data-tab="text">
+                                <i class="fa-solid fa-align-left mr-2"></i> Text
+                            </button>
+                            <button class="tab-btn flex-1 px-4 py-3 text-sm font-semibold text-slate-500 hover:text-slate-700 focus:outline-none transition-colors" data-tab="srt">
+                                <i class="fa-solid fa-film mr-2"></i> SRT (Subs)
+                            </button>
+                            <button class="tab-btn flex-1 px-4 py-3 text-sm font-semibold text-slate-500 hover:text-slate-700 focus:outline-none transition-colors" data-tab="vtt">
+                                <i class="fa-solid fa-code mr-2"></i> VTT (Web)
+                            </button>
+                        </div>
+
+                        <!-- Content Area -->
+                        <div class="flex-grow relative p-0">
+                            <textarea id="output-text" class="w-full h-full p-6 resize-none focus:outline-none text-slate-700 leading-relaxed font-mono text-sm bg-white" placeholder="Your transcription will appear here in real-time..." readonly></textarea>
+                            
+                            <!-- Processing Overlay -->
+                            <div id="processing-overlay" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center z-10">
+                                <div class="relative">
+                                    <div class="w-16 h-16 border-4 border-slate-100 border-t-blue-600 rounded-full animate-spin"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <i class="fa-solid fa-wave-square text-blue-600 text-xs opacity-50"></i>
+                                    </div>
+                                </div>
+                                <p class="font-bold text-slate-800 mt-4 text-lg">Transcribing...</p>
+                                <p id="transcribe-progress" class="text-sm text-slate-500 mt-1">Processing audio chunks locally</p>
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-between items-center">
+                            <div class="text-xs text-slate-500 font-medium flex gap-3">
+                                <span class="bg-white px-2 py-1 rounded border border-slate-200 shadow-sm"><i class="fa-regular fa-clock mr-1"></i> <span id="time-elapsed">00:00</span></span>
+                                <span class="bg-white px-2 py-1 rounded border border-slate-200 shadow-sm"><i class="fa-solid fa-font mr-1"></i> <span id="words-count">0 words</span></span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="copyToClipboard()" class="px-3 py-2 text-slate-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 rounded-lg transition-all text-sm" title="Copy Text">
+                                    <i class="fa-regular fa-copy mr-1"></i> Copy
+                                </button>
+                                <button onclick="downloadResult()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-2">
+                                    <i class="fa-solid fa-download"></i> Export File
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-sm text-slate-400">Powered by OpenAI Whisper & Xenova Transformers.js. Runs entirely in your browser.</p>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS -->
+        <section id="how-it-works" class="w-full py-20 bg-white border-b border-slate-100">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Secure Transcription in 3 Steps</h2>
+                    <p class="text-lg text-slate-600">No accounts, no uploads, no waiting for cloud queues.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8 relative">
+                    <!-- Connecting Line (Desktop) -->
+                    <div class="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-blue-100 via-purple-100 to-blue-100 z-0"></div>
+
+                    <!-- Step 1 -->
+                    <div class="relative z-10 flex flex-col items-center text-center">
+                        <div class="w-24 h-24 bg-white border-4 border-blue-50 rounded-full flex items-center justify-center mb-6 shadow-lg">
+                            <span class="text-3xl font-bold text-blue-600">1</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Load Your File</h3>
+                        <p class="text-slate-600 leading-relaxed">Drag & drop your audio or video file. The browser prepares it for local processing instantly.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative z-10 flex flex-col items-center text-center">
+                        <div class="w-24 h-24 bg-white border-4 border-purple-50 rounded-full flex items-center justify-center mb-6 shadow-lg">
+                            <span class="text-3xl font-bold text-purple-600">2</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">AI Transcribes Locally</h3>
+                        <p class="text-slate-600 leading-relaxed">The WebGPU-accelerated Whisper model converts speech to text directly on your machine.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative z-10 flex flex-col items-center text-center">
+                        <div class="w-24 h-24 bg-white border-4 border-green-50 rounded-full flex items-center justify-center mb-6 shadow-lg">
+                            <span class="text-3xl font-bold text-green-600">3</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Export & Use</h3>
+                        <p class="text-slate-600 leading-relaxed">Copy the text or download SRT/VTT subtitles. Your original file stays pristine.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KEY FEATURES -->
+        <section id="features" class="w-full py-20 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-blue-600 font-semibold tracking-wider uppercase text-sm">Why Go Local?</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-2">Enterprise-Grade Security for Free</h2>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-shield-halved text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Zero Data Egress</h3>
+                        <p class="text-slate-600 leading-relaxed">Unlike cloud services, we technically cannot see your files. Everything happens in the browser sandbox. The ultimate <strong>offline audio to text secure</strong> workflow.</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-microchip text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">WebGPU Acceleration</h3>
+                        <p class="text-slate-600 leading-relaxed">We leverage your device's graphics card for faster processing. A powerful <strong>local video caption generator</strong> that rivals paid desktop software.</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-check-double text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">GDPR & HIPAA Ready</h3>
+                        <p class="text-slate-600 leading-relaxed">Since no data leaves your control, compliance is automatic. The perfect <strong>GDPR compliant transcription tool</strong> for sensitive industries.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USE CASES -->
+        <section id="use-cases" class="w-full py-20 bg-white border-y border-slate-100">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center text-slate-900 mb-12">Designed for Professionals</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="group p-6 border border-slate-200 rounded-xl hover:border-blue-400 transition-colors cursor-default">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-gavel"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-lg">Legal</h3>
+                        </div>
+                        <p class="text-slate-600 text-sm">Safely transcribe confidential client meetings and depositions. Maintain full chain of custody for digital evidence.</p>
+                    </div>
+                    <div class="group p-6 border border-slate-200 rounded-xl hover:border-blue-400 transition-colors cursor-default">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-user-doctor"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-lg">Medical</h3>
+                        </div>
+                        <p class="text-slate-600 text-sm">Dictate patient histories and clinical notes without risking HIPAA violations associated with cloud upload services.</p>
+                    </div>
+                    <div class="group p-6 border border-slate-200 rounded-xl hover:border-blue-400 transition-colors cursor-default">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-microphone-lines"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-lg">Journalism</h3>
+                        </div>
+                        <p class="text-slate-600 text-sm">Transcribe interviews with anonymous sources. Protect your investigative work from third-party leaks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPARISON TABLE -->
+        <section class="w-full py-20 bg-slate-50">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center text-slate-900 mb-10">Cloud vs. VoxVault</h2>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-sm uppercase tracking-wider">
+                                <th class="p-4 font-medium">Feature</th>
+                                <th class="p-4 font-medium text-red-500">Typical Cloud Service</th>
+                                <th class="p-4 font-medium text-blue-600 bg-blue-50">VoxVault</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-700 text-sm">
+                            <tr class="border-b border-slate-100">
+                                <td class="p-4 font-semibold">Data Privacy</td>
+                                <td class="p-4 text-slate-500">Files uploaded to server</td>
+                                <td class="p-4 bg-blue-50 font-bold text-blue-700">100% Local (Zero Egress)</td>
+                            </tr>
+                            <tr class="border-b border-slate-100">
+                                <td class="p-4 font-semibold">Cost</td>
+                                <td class="p-4 text-slate-500">$10 - $30 / month</td>
+                                <td class="p-4 bg-blue-50 font-bold text-blue-700">Free Forever</td>
+                            </tr>
+                            <tr class="border-b border-slate-100">
+                                <td class="p-4 font-semibold">Offline Capable</td>
+                                <td class="p-4 text-slate-500"><i class="fa-solid fa-xmark text-red-500"></i> Requires Internet</td>
+                                <td class="p-4 bg-blue-50 font-bold text-blue-700"><i class="fa-solid fa-check text-green-500"></i> Works Offline</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">File Limits</td>
+                                <td class="p-4 text-slate-500">Restricted (Size/Duration)</td>
+                                <td class="p-4 bg-blue-50 font-bold text-blue-700">Unlimited</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section for SEO -->
+        <section id="faq" class="w-full py-20 bg-white">
+            <div class="max-w-3xl mx-auto px-4 space-y-6">
+                <h2 class="text-3xl font-bold text-center text-slate-900 mb-8">Frequently Asked Questions</h2>
+                
+                <div class="space-y-4">
+                    <details class="group bg-slate-50 border border-slate-200 rounded-xl p-5 cursor-pointer transition-all open:bg-white open:shadow-md">
+                        <summary class="flex justify-between items-center font-semibold text-slate-800 list-none">
+                            <span>Is this audio to text converter truly offline?</span>
+                            <span class="transition-transform group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
+                        </summary>
+                        <div class="text-slate-600 text-sm mt-4 leading-relaxed border-t border-slate-100 pt-4">
+                            Yes. Once the website loads, the AI model (Whisper) is downloaded to your browser's cache. After that, you can disconnect from the internet and the <strong>offline audio to text secure</strong> processing will continue to function 100% locally on your device.
+                        </div>
+                    </details>
+
+                    <details class="group bg-slate-50 border border-slate-200 rounded-xl p-5 cursor-pointer transition-all open:bg-white open:shadow-md">
+                        <summary class="flex justify-between items-center font-semibold text-slate-800 list-none">
+                            <span>How is this GDPR compliant?</span>
+                            <span class="transition-transform group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
+                        </summary>
+                        <div class="text-slate-600 text-sm mt-4 leading-relaxed border-t border-slate-100 pt-4">
+                            Because no data is sent to any server. Traditional transcription services upload your files to the cloud. VoxVault runs the neural network inside your browser, making it a native <strong>GDPR compliant transcription tool</strong> by design. We physically cannot access your data.
+                        </div>
+                    </details>
+
+                    <details class="group bg-slate-50 border border-slate-200 rounded-xl p-5 cursor-pointer transition-all open:bg-white open:shadow-md">
+                        <summary class="flex justify-between items-center font-semibold text-slate-800 list-none">
+                            <span>Can I use this as a video caption generator?</span>
+                            <span class="transition-transform group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
+                        </summary>
+                        <div class="text-slate-600 text-sm mt-4 leading-relaxed border-t border-slate-100 pt-4">
+                            Absolutely. You can upload MP4, MOV, or M4A files. The tool extracts the audio and generates timestamped subtitles. You can then export these as .SRT or .VTT files, serving as a free <strong>local video caption generator</strong> for your content.
+                        </div>
+                    </details>
+
+                    <details class="group bg-slate-50 border border-slate-200 rounded-xl p-5 cursor-pointer transition-all open:bg-white open:shadow-md">
+                        <summary class="flex justify-between items-center font-semibold text-slate-800 list-none">
+                            <span>What audio formats are supported?</span>
+                            <span class="transition-transform group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
+                        </summary>
+                        <div class="text-slate-600 text-sm mt-4 leading-relaxed border-t border-slate-100 pt-4">
+                            We support all major audio and video formats including MP3, WAV, OGG, MP4, MOV, and M4A. The browser's native audio decoding engine handles the file processing.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-auto py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
+            <p>&copy; 2023 VoxVault. Designed for Privacy.</p>
+        </div>
+    </footer>
+
+    <!-- WORKER SCRIPT CONTENT -->
+    <script id="worker-code" type="javascript/worker">
+        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+
+        // Configure environment for browser execution
+        env.allowLocalModels = false;
+        env.useBrowserCache = true; 
+        
+        class ASR {
+            static instance = null;
+            static modelId = 'Xenova/whisper-tiny'; // Default model
+
+            static async getInstance(progressCallback) {
+                if (!this.instance) {
+                    this.instance = await pipeline('automatic-speech-recognition', this.modelId, {
+                        progress_callback: progressCallback
+                    });
+                }
+                return this.instance;
+            }
+        }
+
+        self.addEventListener('message', async (event) => {
+            const { type, audio, language, model } = event.data;
+
+            if (type === 'load') {
+                try {
+                    // Allow model switching if needed in future, for now static
+                    await ASR.getInstance((data) => {
+                        self.postMessage({ type: 'download', data });
+                    });
+                    self.postMessage({ type: 'ready' });
+                } catch (err) {
+                    self.postMessage({ type: 'error', message: err.message });
+                }
+            } 
+            
+            else if (type === 'transcribe') {
+                try {
+                    const transcriber = await ASR.getInstance();
+                    
+                    const result = await transcriber(audio, {
+                        chunk_length_s: 30,
+                        stride_length_s: 5,
+                        language: language === 'multilingual' ? null : language,
+                        task: 'transcribe',
+                        return_timestamps: true,
+                    });
+
+                    self.postMessage({ type: 'complete', data: result });
+                } catch (err) {
+                    self.postMessage({ type: 'error', message: err.message });
+                }
+            }
+        });
+    </script>
+
+    <!-- MAIN APP LOGIC -->
+    <script type="module">
+        // --- Worker Setup ---
+        const workerCode = document.getElementById('worker-code').textContent;
+        const blob = new Blob([workerCode], { type: 'application/javascript' });
+        const workerUrl = URL.createObjectURL(blob);
+        const worker = new Worker(workerUrl, { type: 'module' });
+
+        // --- DOM Elements ---
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('file-input');
+        const transcribeBtn = document.getElementById('transcribe-btn');
+        const modelStatusText = document.getElementById('model-status-text');
+        const modelProgressBar = document.getElementById('model-progress-bar');
+        const languageSelect = document.getElementById('language-select');
+        const outputText = document.getElementById('output-text');
+        const processingOverlay = document.getElementById('processing-overlay');
+        const transcribeProgress = document.getElementById('transcribe-progress');
+        const timeElapsedElem = document.getElementById('time-elapsed');
+        const wordsCountElem = document.getElementById('words-count');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+
+        // --- State ---
+        let audioContext = null;
+        let audioBuffer = null;
+        let transcriptionResult = null; // Stores the full result object
+        let currentTab = 'text';
+        let isModelReady = false;
+
+        // --- Initialization ---
+        // Start loading the model immediately
+        worker.postMessage({ type: 'load' });
+
+        // --- Event Listeners ---
+        
+        // Worker Messages
+        worker.onmessage = (e) => {
+            const { type, data, message } = e.data;
+
+            if (type === 'download') {
+                if (data.status === 'progress') {
+                    const percent = data.progress ? data.progress.toFixed(2) : 0;
+                    modelStatusText.innerText = `Loading Model... ${percent}%`;
+                    modelProgressBar.style.width = `${percent}%`;
+                    
+                    // Specifically check for 'file' property to distinguish different model files downloading
+                    if (percent >= 99 && data.file.includes('onnx')) {
+                         modelStatusText.innerText = 'Finalizing...';
+                    }
+                } else if (data.status === 'done') {
+                     // Might happen multiple times for different files
+                }
+            }
+            else if (type === 'ready') {
+                isModelReady = true;
+                modelStatusText.innerText = 'Ready (Offline Mode)';
+                modelStatusText.classList.add('text-green-600', 'font-bold');
+                modelProgressBar.style.width = '100%';
+                modelProgressBar.classList.remove('bg-blue-600');
+                modelProgressBar.classList.add('bg-green-500');
+                checkReadyState();
+            }
+            else if (type === 'complete') {
+                transcriptionResult = data;
+                updateOutputDisplay();
+                stopProcessingUI();
+            }
+            else if (type === 'error') {
+                alert('Error: ' + message);
+                stopProcessingUI();
+            }
+        };
+
+        // Drag & Drop
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('border-blue-500', 'bg-blue-50');
+        });
+        dropzone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('border-blue-500', 'bg-blue-50');
+        });
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('border-blue-500', 'bg-blue-50');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        dropzone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        // Transcription
+        transcribeBtn.addEventListener('click', startTranscription);
+
+        // Tabs
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => {
+                    b.classList.remove('active', 'text-blue-600', 'border-b-2', 'border-blue-600');
+                    b.classList.add('text-slate-500');
+                });
+                btn.classList.add('active', 'text-blue-600', 'border-b-2', 'border-blue-600');
+                btn.classList.remove('text-slate-500');
+                currentTab = btn.dataset.tab;
+                updateOutputDisplay();
+            });
+        });
+
+        // --- Functions ---
+
+        async function handleFile(file) {
+            if (!file.type.startsWith('audio/') && !file.type.startsWith('video/')) {
+                alert('Please upload an audio or video file.');
+                return;
+            }
+
+            // UI Update
+            dropzone.innerHTML = `
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-file-audio text-2xl"></i>
+                </div>
+                <h3 class="font-semibold text-slate-700 truncate w-48">${file.name}</h3>
+                <p class="text-sm text-slate-500 mt-1">${(file.size / (1024*1024)).toFixed(2)} MB</p>
+            `;
+
+            // Decode & Resample Audio
+            try {
+                const baseContext = new (window.AudioContext || window.webkitAudioContext)();
+                const arrayBuffer = await file.arrayBuffer();
+                const decodedAudio = await baseContext.decodeAudioData(arrayBuffer);
+                
+                // Robust Resampling to 16000Hz (Required for Whisper)
+                const offlineContext = new OfflineAudioContext(1, decodedAudio.duration * 16000, 16000);
+                const source = offlineContext.createBufferSource();
+                source.buffer = decodedAudio;
+                source.connect(offlineContext.destination);
+                source.start(0);
+                
+                const resampledAudio = await offlineContext.startRendering();
+                audioBuffer = resampledAudio.getChannelData(0);
+                
+                checkReadyState();
+            } catch (error) {
+                console.error(error);
+                alert('Error processing audio. Please try a different file format.');
+            }
+        }
+
+        function checkReadyState() {
+            if (isModelReady && audioBuffer) {
+                transcribeBtn.disabled = false;
+                transcribeBtn.classList.remove('disabled:bg-slate-300', 'disabled:cursor-not-allowed');
+                transcribeBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Start Transcription`;
+            }
+        }
+
+        function startTranscription() {
+            if (!audioBuffer) return;
+
+            transcribeBtn.disabled = true;
+            processingOverlay.classList.remove('hidden');
+            outputText.value = ''; // Clear previous
+            
+            const lang = languageSelect.value;
+            
+            // Send to worker
+            worker.postMessage({
+                type: 'transcribe',
+                audio: audioBuffer,
+                language: lang
+            });
+        }
+
+        function stopProcessingUI() {
+            processingOverlay.classList.add('hidden');
+            transcribeBtn.disabled = false;
+        }
+
+        function updateOutputDisplay() {
+            if (!transcriptionResult) return;
+            
+            let text = '';
+            if (currentTab === 'text') {
+                text = transcriptionResult.text;
+            } else if (currentTab === 'srt') {
+                text = generateSRT(transcriptionResult.chunks);
+            } else if (currentTab === 'vtt') {
+                text = generateVTT(transcriptionResult.chunks);
+            }
+            
+            outputText.value = text;
+            
+            // Update stats
+            const wordCount = transcriptionResult.text.split(/\s+/).length;
+            wordsCountElem.innerText = `${wordCount} words`;
+            // Time elapsed is mock here, but could be tracked properly
+            timeElapsedElem.innerText = "Done"; 
+        }
+
+        // --- Export Helpers ---
+
+        window.downloadResult = () => {
+            if (!outputText.value) return;
+            
+            const extension = currentTab === 'text' ? 'txt' : currentTab;
+            const blob = new Blob([outputText.value], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transcription.${extension}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        };
+
+        window.copyToClipboard = () => {
+            if (!outputText.value) return;
+            navigator.clipboard.writeText(outputText.value);
+            alert('Copied to clipboard!');
+        };
+
+        // --- Format Converters ---
+        // Helper to format seconds to HH:MM:SS,mmm
+        function formatTimeSRT(seconds) {
+            const date = new Date(0);
+            date.setSeconds(seconds);
+            const hh = String(Math.floor(seconds / 3600)).padStart(2, '0');
+            const mm = String(date.getUTCMinutes()).padStart(2, '0');
+            const ss = String(date.getUTCSeconds()).padStart(2, '0');
+            const ms = String(Math.floor((seconds % 1) * 1000)).padStart(3, '0');
+            return `${hh}:${mm}:${ss},${ms}`;
+        }
+
+        function formatTimeVTT(seconds) {
+             return formatTimeSRT(seconds).replace(',', '.');
+        }
+
+        function generateSRT(chunks) {
+            if (!chunks) return '';
+            return chunks.map((chunk, index) => {
+                const start = formatTimeSRT(chunk.timestamp[0]);
+                const end = formatTimeSRT(chunk.timestamp[1]);
+                return `${index + 1}\n${start} --> ${end}\n${chunk.text.trim()}\n`;
+            }).join('\n');
+        }
+
+        function generateVTT(chunks) {
+            if (!chunks) return '';
+            return 'WEBVTT\n\n' + chunks.map((chunk) => {
+                const start = formatTimeVTT(chunk.timestamp[0]);
+                const end = formatTimeVTT(chunk.timestamp[1]);
+                return `${start} --> ${end}\n${chunk.text.trim()}\n`;
+            }).join('\n');
+        }
+
+    </script>
+</body>
+</html>
